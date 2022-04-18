@@ -1,8 +1,7 @@
 class Book {
-  constructor(title, author, isbn) {
+  constructor(title, author) {
     this.title = title;
     this.author = author;
-    this.isbn = isbn;
   }
 }
 
@@ -12,12 +11,10 @@ class UI {
       {
         title: 'Book 1',
         author: 'vincent abuya',
-        isbn: '3454555',
       },
       {
         title: 'Book 2',
         author: 'vincent arnord',
-        isbn: '34545655',
       },
     ];
 
@@ -33,12 +30,22 @@ class UI {
     row.innerHTML = `
       <td>${book.title}</td>
       <td>${book.author}</td>
-      <td>${book.isbn}</td>
-      <td><a href="#" class="btn btn"> Remove </a></td>    
+      <td><button class="btn btn-remove"> Remove </button></td>    
     `;
 
     list.appendChild(row);
   }
+
+  static removeFromStore(target) {
+    const removeBook = target.previousElementSibling.firstElementChild.textContent;
+
+    this.books.filter((number, index) => {
+      if(number.title === removeBook) {
+        this.books.splice(index, 1)
+      }
+      return this.books
+    })
+    }
 }
 
 document.addEventListener('DOMContentLoaded', UI.displayBooks);
@@ -49,10 +56,22 @@ document.querySelector('#book-form').addEventListener('submit', (e) => {
 
   const title = document.querySelector('#title').value;
   const author = document.querySelector('#author').value;
-  const isbn = document.querySelector('#isbn').value;
 
-  const book = new Book(title, author, isbn);
+  const book = new Book(title, author);
 
   //Add Book to List
   UI.addBookToList(book);
 });
+
+
+// Remove a book
+
+function removeBook(e) {
+  if (e.target.className === 'btn-remove') {
+    UI.removeBookFromStore(e.target);
+
+  }
+}
+
+const bookList = document.querySelector('.book-list')
+bookList.addEventListener('click', removeBook)
