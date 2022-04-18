@@ -30,22 +30,27 @@ class UI {
     row.innerHTML = `
       <td>${book.title}</td>
       <td>${book.author}</td>
-      <td><button class="btn btn-remove"> Remove </button></td>    
+      <td><button class="btn btn-delete"> Remove </button></td>    
     `;
 
     list.appendChild(row);
   }
 
-  static removeFromStore(target) {
-    const removeBook = target.previousElementSibling.firstElementChild.textContent;
-
-    this.books.filter((number, index) => {
-      if(number.title === removeBook) {
-        this.books.splice(index, 1)
-      }
-      return this.books
-    })
+  static deleteBook(el){
+    if(el.classList.contains('btn-delete')) {
+      el.parentElement.parentElement.remove();
     }
+
+  }
+
+  static clearFields(){
+
+    document.querySelector('#title').value = '';
+    document.querySelector('#author').value = '';
+
+  }
+
+  
 }
 
 document.addEventListener('DOMContentLoaded', UI.displayBooks);
@@ -61,17 +66,13 @@ document.querySelector('#book-form').addEventListener('submit', (e) => {
 
   //Add Book to List
   UI.addBookToList(book);
+
+  //Fields cleared 
+  UI.clearFields();
 });
 
+//Delete a book 
+document.querySelector('#book-list').addEventListener('click', (e) => {
+  UI.deleteBook(e.target);
+});
 
-// Remove a book
-
-function removeBook(e) {
-  if (e.target.className === 'btn-remove') {
-    UI.removeBookFromStore(e.target);
-
-  }
-}
-
-const bookList = document.querySelector('.book-list')
-bookList.addEventListener('click', removeBook)
