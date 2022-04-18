@@ -40,7 +40,6 @@ class UI {
     if(el.classList.contains('btn-delete')) {
       el.parentElement.parentElement.remove();
     }
-
   }
 
   static clearFields(){
