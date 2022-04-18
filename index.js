@@ -28,9 +28,13 @@ class UI {
 
     const row = document.createElement('tr');
     row.innerHTML = `
-      <td>${book.title}</td>
-      <td>${book.author}</td>
-      <td><button class="btn btn-delete"> Remove </button></td>    
+    <div class="books_stores">
+     <div class="stores_titles">
+      <p>${book.title}</p>
+      <p>${book.author}</p>
+     </div> 
+      <button class="btn btn-delete"> Remove </button> 
+    </div>     
     `;
 
     list.appendChild(row);
