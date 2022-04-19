@@ -1,3 +1,4 @@
+/* eslint-disable max-classes-per-file */
 class Book {
   constructor(title, author) {
     this.title = title;
@@ -7,8 +8,7 @@ class Book {
 
 class UI {
   static displayBooks() {
-    
-
+    // eslint-disable-next-line no-use-before-define
     const books = Store.getBooks();
 
     books.forEach((book) => UI.addBookToList(book));
@@ -31,86 +31,77 @@ class UI {
     list.appendChild(row);
   }
 
-  static deleteBook(el){
-    if(el.classList.contains('btn-delete')) {
+  static deleteBook(el) {
+    if (el.classList.contains('btn-delete')) {
       el.parentElement.parentElement.remove();
     }
   }
 
-  static clearFields(){
-
+  static clearFields() {
     document.querySelector('#title').value = '';
     document.querySelector('#author').value = '';
-
-  }  
+  }
 }
 
-//Local storage 
-class Store{
-   static getBooks(){
-     let books;
-     if(localStorage.getItem('books') === null){
-       books = [];
-     }
-     else{
-       books = JSON.parse(localStorage.getItem('books'));
-     }
-     return books;
+// Local storage
+class Store {
+  static getBooks() {
+    let books;
+    if (localStorage.getItem('books') === null) {
+      books = [];
+    } else {
+      books = JSON.parse(localStorage.getItem('books'));
+    }
+    return books;
   }
 
-  static addBook(book){
+  static addBook(book) {
     const books = Store.getBooks();
     books.push(book);
     localStorage.setItem('books', JSON.stringify(books));
   }
 
-  static removeBook(book){
+  // eslint-disable-next-line no-unused-vars
+  static removeBook(book) {
     const books = Store.getBooks();
 
     books.forEach((book, index) => {
-      if(book.book === book) {
-        books.splice(index,1);
+      if (book.book === book) {
+        books.splice(index, 1);
       }
-
     });
 
     localStorage.setItem('books', JSON.stringify(books));
-
   }
 }
 
 document.addEventListener('DOMContentLoaded', UI.displayBooks);
 
-//Add a book
+// Add a book
 document.querySelector('#book-form').addEventListener('submit', (e) => {
   e.preventDefault();
 
   const title = document.querySelector('#title').value;
   const author = document.querySelector('#author').value;
 
-  //validatation 
-  if(title === '' || author === '') {
+  // validatation
+  if (title === '' || author === '') {
     alert('Missing field');
-  }
-  else {
+  } else {
     const book = new Book(title, author);
 
-    //Add Book to List
+    // Add Book to List
     UI.addBookToList(book);
 
-    //Add book to local storage
+    // Add book to local storage
     Store.addBook(book);
 
-
-
-    //Fields cleared
+    // Fields cleared
     UI.clearFields();
-
-  }  
+  }
 });
 
-//Delete a book 
+// Delete a book
 document.querySelector('#book-list').addEventListener('click', (e) => {
   UI.deleteBook(e.target);
 });
-
