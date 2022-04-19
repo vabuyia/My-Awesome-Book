@@ -7,18 +7,9 @@ class Book {
 
 class UI {
   static displayBooks() {
-    const StoredBooks = [
-      {
-        title: 'Book 1',
-        author: 'vincent abuya',
-      },
-      {
-        title: 'Book 2',
-        author: 'vincent arnord',
-      },
-    ];
+    
 
-    const books = StoredBooks;
+    const books = Store.getBooks();
 
     books.forEach((book) => UI.addBookToList(book));
   }
@@ -51,9 +42,41 @@ class UI {
     document.querySelector('#title').value = '';
     document.querySelector('#author').value = '';
 
+  }  
+}
+
+//Local storage 
+class Store{
+   static getBooks(){
+     let books;
+     if(localStorage.getItem('books') === null){
+       books = [];
+     }
+     else{
+       books = JSON.parse(localStorage.getItem('books'));
+     }
+     return books;
   }
 
-  
+  static addBook(book){
+    const books = Store.getBooks();
+    books.push(book);
+    localStorage.setItem('books', JSON.stringify(books));
+  }
+
+  static removeBook(book){
+    const books = Store.getBooks();
+
+    books.forEach((book, index) => {
+      if(book.book === book) {
+        books.splice(index,1);
+      }
+
+    });
+
+    localStorage.setItem('books', JSON.stringify(books));
+
+  }
 }
 
 document.addEventListener('DOMContentLoaded', UI.displayBooks);
@@ -65,13 +88,25 @@ document.querySelector('#book-form').addEventListener('submit', (e) => {
   const title = document.querySelector('#title').value;
   const author = document.querySelector('#author').value;
 
-  const book = new Book(title, author);
+  //validatation 
+  if(title === '' || author === '') {
+    alert('Missing field');
+  }
+  else {
+    const book = new Book(title, author);
 
-  //Add Book to List
-  UI.addBookToList(book);
+    //Add Book to List
+    UI.addBookToList(book);
 
-  //Fields cleared 
-  UI.clearFields();
+    //Add book to local storage
+    Store.addBook(book);
+
+
+
+    //Fields cleared
+    UI.clearFields();
+
+  }  
 });
 
 //Delete a book 
